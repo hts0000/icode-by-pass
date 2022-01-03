@@ -1,7 +1,4 @@
 ## 原理
-
-##### 闲鱼搜慕课icode
-
 docker镜像本质是一堆文件的集合，既然是文件，那就可以直接访问。
 docker inspect <镜像名> 可以看到镜像文件存放的位置
 
@@ -12,7 +9,7 @@ docker inspect <镜像名> 可以看到镜像文件存放的位置
 
 可以发现认证是通过coolenv这个二进制文件来做的
 
-继续在镜像文件存放位置find coolenv，拿到二进制文件进行分析（具体分析过程Baidu），发现一个疑似的api网址：https://apis.imooc.com/?cid=108&icode=%sinternal，浏览器请求发现返回一串json，把内容的乱码拿去解析发现内容为**icode不正确**。可以确定这个就是coolenv启动时请求的icode api。
+继续在镜像文件存放位置find coolenv，拿到二进制文件进行分析（具体分析过程Baidu），发现一个疑似的api网址：[https://apis.imooc.com/?cid=108&icode=%sinternal]()，浏览器请求发现返回一串json，把内容的乱码拿去解析发现内容为**icode不正确**。可以确定这个就是coolenv启动时请求的icode api。
 
 既然知道了他请求的网址，那就可以在本地伪造一个fake imooc api网站，把镜像的请求截取到本地，直接返回相应内容，即可让coolenv认为认证成功。
 
@@ -31,11 +28,7 @@ docker inspect <镜像名> 可以看到镜像文件存放的位置
 
 做完这一切之后，镜像就变成了一个认可我们本地https服务端的镜像，现在需要做的就是把镜像对https://api.imooc.com的请求改为请求本地即可。
 
-要做到这一点很简单，我们都知道对域名的请求都会经过dns解析，最后变成对具体ip地址的请求。最简单的做法是在/etc/hosts中添加一条指向，把请求指向docker网关，也就是本机。
-
-我们如法炮制，进到镜像文件所在目录，find hosts文件，添加如下内容
-```172.17.0.1 apis.imooc.com```
-ip需要改为自己的docker网关，ip a可以看到docker网关。
+要做到这一点很简单，docker命令本身提供了--add-host选项可以为容器添加域名解析。
 
 到这里就完成了所有工作，启动本地的https服务端，然后启动镜像，启动命令如下：
 ```bash

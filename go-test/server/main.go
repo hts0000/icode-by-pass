@@ -6,13 +6,16 @@ import (
 )
 
 func handle(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("####")
-	fmt.Fprint(w, `{"msg":"返回什么就返回什么,比如：fuck you imooc","data":null,"code":1000}`)
+	// code: 1000  ->  验证成功
+	// code: 1001  ->  icode不正确
+	fmt.Println("handle...")
+	fmt.Fprint(w, `{"msg":"Yes! I'm imooc.","data":null,"code":1000}`)
 }
 
 func main() {
 	http.HandleFunc("/", handle)
-	if err := http.ListenAndServeTLS(":443", "/home/hts0000/ssl/server.crt", "/home/hts0000/ssl/server.key", nil); err != nil {
+	fmt.Println("Running...")
+	if err := http.ListenAndServeTLS(":443", "./ssl/server.crt", "./ssl/server.key", nil); err != nil {
 		// if err := http.ListenAndServe(":80", nil); err != nil {
 		panic(err)
 	}

@@ -1,3 +1,41 @@
+## Quick Start
+### clone该仓库
+```bash
+git clone https://github.com/hts0000/icode-by-pass.git
+```
+
+### 解压并导入镜像
+链接：https://pan.baidu.com/s/1vIhGSEySsP1Te2TkyXOLnQ  
+提取码：bzax
+```bash
+# 解压镜像
+tar -xf coolenv-icode-bypass.tar.gz
+# 导入镜像
+docker load < coolenv-icode-bypass
+```
+
+### 启动https server
+```bash
+# 进入仓库目录
+cd icode-by-pass
+# 启动http server
+go run go-test/server/main.go
+```
+
+### 启停容器
+```bash
+# 首次启动
+# --add-host 修改为自己的 docker 网关ip
+docker run --entrypoint start.sh --name coolenv -p 18000:18000 --add-host apis.imooc.com:172.17.0.1 -e ICODE="xxxxxx" -e GODEBUG=x509ignoreCN=0 coolenv-icode-bypass
+
+# 后续启动
+docker start coolenv
+
+# 停止容器
+docker kill coolenv
+```
+**注意: 后续启动同样需要先启动`https server`**
+
 ## 原理
 docker镜像本质是一堆文件的集合，既然是文件，那就可以直接访问。
 ```bash

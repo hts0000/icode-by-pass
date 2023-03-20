@@ -74,7 +74,7 @@ coolenv --race_data=/data/coolenv/ningbo.json --grpc_pb_gen=/data/coolenv/pb/coo
 
 首先要知道的是请求的这个网站是https的，而https的网站需要解决证书与认证的问题。
 
-所以我们需要在本地生成一对根证书和服务端证书。生成证书步骤Baidu，在**仓库ssl目录**下有已经生成好的证书，可以直接使用。重点是生成时需要在生成配置中，配置Common Name必须为api.imooc.com
+所以我们需要在本地生成一对根证书和服务端证书。生成证书步骤Baidu，在**仓库ssl目录**下有已经生成好的证书，可以直接使用。重点是生成时需要在生成配置中，配置Common Name必须为apis.imooc.com
 ![](https://cdn.jsdelivr.net/gh/hts0000/images/2.jpg)
 
 参考文章：[https://github.com/flyingtime/go-https]()
@@ -91,7 +91,7 @@ cd /tmp
 umount /tmp/coolenv
 ```
 
-做完这一切之后，镜像就变成了一个认可我们本地https服务端的镜像，现在需要做的就是把镜像对[https://api.imooc.com]()的请求改为请求本地即可。
+做完这一切之后，镜像就变成了一个认可我们本地https服务端的镜像，现在需要做的就是把镜像对[https://apis.imooc.com]()的请求改为请求本地即可。
 
 要做到这一点很简单，docker命令本身提供了--add-host选项可以为容器添加域名解析。
 
